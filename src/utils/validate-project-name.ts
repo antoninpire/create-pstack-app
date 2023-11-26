@@ -1,8 +1,4 @@
-function removeTrailingSlash(input: string) {
-  if (input.length > 1 && input.endsWith("/")) input = input.slice(0, -1);
-
-  return input;
-}
+import { removeTrailingSlash } from "$/utils/remove-trailing-slash";
 
 const validationRegExp =
   /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/;

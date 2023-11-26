@@ -1,4 +1,4 @@
-import * as prompts from "@clack/prompts";
+import { confirm, group, select, text } from "@clack/prompts";
 import { Command } from "commander";
 
 import { getPackageManager } from "$/utils/get-package-manager";
@@ -6,7 +6,8 @@ import { getVersion } from "$/utils/get-version";
 import { validateProjectName } from "$/utils/validate-project-name";
 
 type CLIStyling = "none" | "tailwind" | "uno";
-type CLIDatabase = "none" | "planetscale" | "turso" | "mysql";
+type CLIDatabase = "planetscale" | "turso" | "mysql";
+type CLIFormActions = "none" | "trpc" | "superforms";
 
 type CLIFlags = {
   git: boolean;
@@ -14,9 +15,10 @@ type CLIFlags = {
   database: CLIDatabase;
   styling: CLIStyling;
   lucia: boolean;
+  ["form-actions"]: CLIFormActions;
 };
 
-type CLIResult = {
+export type CLIResult = {
   name: string;
   flags: CLIFlags;
 };
@@ -45,52 +47,65 @@ export async function runCLI(): Promise<CLIResult> {
   const packageManager = getPackageManager();
   const flags = program.opts();
 
-  const project = await prompts.group(
+  const project = await group(
     {
       ...(!program.args[0] && {
         name: () =>
-          prompts.text({
+          text({
             message: "What is the name of your project?",
             defaultValue: projectName,
             validate: validateProjectName,
           }),
       }),
       styling: () =>
-        prompts.select({
+        select({
           message: "What styling solution would you like to use?",
           options: [
             { value: "none", label: "None" },
-            { value: "Tailwind CSS", label: "tailwind" },
-            { value: "Uno CSS", label: "uno" },
+            { label: "Tailwind CSS", value: "tailwind" },
+            { label: "Uno CSS", value: "uno" },
           ],
           initialValue: "none",
         }),
       database: () =>
-        prompts.select({
+        select({
           message: "What database would you like to use?",
           options: [
-            { value: "none", label: "None" },
-            { value: "Planetscale", label: "planetscale" },
-            { value: "Turso", label: "turso" },
-            { value: "MySQL", label: "mysql" },
+            { label: "Planetscale", value: "planetscale" },
+            { label: "Turso", value: "turso" },
           ],
-          initialValue: "none",
+          initialValue: "planetscale",
         }),
-      lucia: () =>
-        prompts.confirm({
+      lucia: async (opts) => {
+        if (opts.results.database === "none") return false;
+        return confirm({
           message: "Would you like us to setup authentication using Lucia?",
           initialValue: true,
+        });
+      },
+      ["form-actions"]: () =>
+        select({
+          message: "What will you use to handle your form actions?",
+          options: [
+            { label: "None", value: "none" },
+            { label: "TRPC", value: "trpc" },
+            {
+              label: "Sveltekit form actions + superforms",
+              value: "superforms",
+            },
+          ],
+          initialValue: "trpc",
         }),
       ...(!flags["no-install"] && {
         install: () =>
-          prompts.confirm({
+          confirm({
             message: `Should we install your dependencies using "${packageManager} install"?`,
             initialValue: true,
           }),
       }),
       ...(!flags["no-git"] && {
         git: () =>
-          prompts.confirm({
+          confirm({
             message: "Would you like to initialize a new git repository?",
             initialValue: true,
           }),
@@ -110,7 +125,8 @@ export async function runCLI(): Promise<CLIResult> {
       git: project.git ?? false,
       install: project.install ?? false,
       styling: project.styling as CLIStyling,
-      lucia: project.lucia,
+      lucia: (project.lucia as boolean) ?? false,
+      "form-actions": project["form-actions"] as CLIFormActions,
     },
   };
 
