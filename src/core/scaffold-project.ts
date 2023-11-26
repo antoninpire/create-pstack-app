@@ -70,7 +70,7 @@ export async function scaffoldProject(
   spinner.start("Copying template files...");
   fs.copySync(templatePath, opts.projectPath);
   fs.copySync(
-    templatePath + "/.gitignore",
+    path.join(templatePath, "_gitignore"),
     path.join(opts.projectPath, ".gitignore")
   );
 
