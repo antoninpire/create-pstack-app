@@ -2,6 +2,7 @@ import fs from "fs-extra";
 
 import { Installer } from "$/installers";
 import { addDependency } from "$/utils/add-dependency";
+import { getPathFromDist } from "$/utils/get-path-from-dist";
 
 export const luciaInstaller: Installer = (opts, projectPath) => {
   addDependency({
@@ -11,7 +12,10 @@ export const luciaInstaller: Installer = (opts, projectPath) => {
   });
 
   if (opts.flags.database === "planetscale") {
-    fs.copySync("template/extras/lucia/planetscale", projectPath);
+    fs.copySync(
+      getPathFromDist("../template/extras/lucia/planetscale"),
+      projectPath
+    );
   }
 
   // TODO: snippets for login pages and signup pages

@@ -3,6 +3,7 @@ import path from "path";
 
 import { Installer } from "$/installers";
 import { addDependency } from "$/utils/add-dependency";
+import { getPathFromDist } from "$/utils/get-path-from-dist";
 
 export const planetscaleInstaller: Installer = (opts, projectPath) => {
   addDependency({
@@ -11,7 +12,7 @@ export const planetscaleInstaller: Installer = (opts, projectPath) => {
     dev: false,
   });
 
-  fs.copySync("template/extras/planetscale", projectPath);
+  fs.copySync(getPathFromDist("../template/extras/planetscale"), projectPath);
 
   const packageJsonPath = path.join(projectPath, "package.json");
   const packageJson = fs.readJsonSync(packageJsonPath);

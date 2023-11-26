@@ -1,32 +1,43 @@
 #!/usr/bin/env node
+import { spinner as clackSpinner, outro } from "@clack/prompts";
 import { execa } from "execa";
 import fs from "fs-extra";
 import path from "path";
 
 import { runCLI } from "$/core/cli";
+import { initializeGit } from "$/core/initialize-git";
+import { installDependencies } from "$/core/install-dependencies";
 import { scaffoldProject } from "$/core/scaffold-project";
 import { runInstallers } from "$/installers";
 import { getPackageManager } from "$/utils/get-package-manager";
 import { parseNameAndPath } from "$/utils/parse-name-and-path";
+import { sortPackageJson } from "sort-package-json";
 
 async function main() {
+  // TODO: remove this line
   fs.removeSync("test");
+
   const result = await runCLI();
 
   const packageManager = getPackageManager();
+
+  const spinner = clackSpinner();
 
   // We parse the path of the project as well as the name
   const [parsedName, parsedPath] = parseNameAndPath(result.name);
 
   // We scaffold the projects
-  await scaffoldProject({
-    packageManager,
-    projectName: parsedName,
-    projectPath: parsedPath,
-  });
+  await scaffoldProject(
+    {
+      packageManager,
+      projectName: parsedName,
+      projectPath: parsedPath,
+    },
+    spinner
+  );
 
   // We run the different installers
-  runInstallers(result, parsedPath);
+  runInstallers(result, parsedPath, spinner);
 
   // Handle the package.json file
   const packageJsonPath = path.join(parsedPath, "package.json");
@@ -41,15 +52,23 @@ async function main() {
     packageJson.packageManager = `${packageManager}@${stdout.trim()}`;
   }
 
+  // We sort the package.json file
+  sortPackageJson(packageJson);
+
   fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
 
-  // TODO: sort the package json
+  // We install the dependencies
+  if (result.flags.install) {
+    await installDependencies(parsedPath, packageManager, spinner);
+  }
 
-  // TODO: if install, run the installer
+  // We initialize the git repository
+  if (result.flags.git) {
+    await initializeGit(parsedPath, spinner);
+  }
 
-  // TODO: if git, init a git repository
-
-  // TODO: print next steps
+  // Show the next steps
+  outro("Thanks for trying us out !");
 
   process.exit(0);
 }

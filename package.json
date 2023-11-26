@@ -1,16 +1,28 @@
 {
   "name": "create-pstack-app",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Create a super fast web app with the perfect stack.",
   "license": "MIT",
   "main": "index.js",
+  "files": [
+    "dist",
+    "template",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "package.json"
+  ],
+  "exports": "./dist/index.js",
+  "bin": {
+    "create-pstack-app": "./dist/index.js"
+  },
   "scripts": {
     "lint": "eslint .",
     "dev": "tsup --watch",
     "start": "node index.js",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "publish": "pnpm build && npm publish"
+    "pkg:publish": "pnpm build && npm publish"
   },
   "keywords": [
     "perfect-stack",
@@ -30,7 +42,8 @@
     "@clack/prompts": "^0.7.0",
     "commander": "^11.1.0",
     "execa": "^8.0.1",
-    "fs-extra": "^11.1.1"
+    "fs-extra": "^11.1.1",
+    "sort-package-json": "^2.6.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

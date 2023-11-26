@@ -1,23 +1,25 @@
-import { confirm, select, spinner } from "@clack/prompts";
+import { confirm, select } from "@clack/prompts";
 import fs from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { Spinner } from "$/types";
 import { PackageManager } from "$/utils/get-package-manager";
 
-export async function scaffoldProject(opts: {
-  projectName: string;
-  projectPath: string;
-  packageManager: PackageManager;
-}) {
+export async function scaffoldProject(
+  opts: {
+    projectName: string;
+    projectPath: string;
+    packageManager: PackageManager;
+  },
+  spinner: Spinner
+) {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
 
   const templatePath = path.join(__dirname, "../template/default");
 
-  const s = spinner();
-
-  s.start("Scaffolding project...");
+  spinner.start("Scaffolding project...");
 
   if (fs.existsSync(opts.projectPath)) {
     if (fs.readdirSync(opts.projectPath).length > 0) {
@@ -39,7 +41,7 @@ export async function scaffoldProject(opts: {
 
       switch (newPath) {
         case "abort":
-          s.stop("Aborting...");
+          spinner.stop("Aborting...");
           process.exit(1);
         case "empty":
           const confirmation = await confirm({
@@ -47,24 +49,30 @@ export async function scaffoldProject(opts: {
           });
 
           if (!confirmation) {
-            s.stop("Aborting...");
+            spinner.stop("Aborting...");
             process.exit(1);
           }
 
-          s.message(`Emptying "${opts.projectName}"...`);
+          spinner.message(`Emptying "${opts.projectName}"...`);
           fs.emptyDirSync(opts.projectPath);
           break;
       }
     } else {
       if (opts.projectName !== ".")
-        s.message(
+        spinner.message(
           `"${opts.projectName}" already exists but is empty, continuing...\n`
         );
     }
   }
 
-  s.start("Copying template files...");
-  fs.copySync(templatePath, opts.projectPath);
+  spinner.stop("Scaffolded project successfully!");
 
-  s.stop("Copied template filed successfully!");
+  spinner.start("Copying template files...");
+  fs.copySync(templatePath, opts.projectPath);
+  fs.copySync(
+    templatePath + "/.gitignore",
+    path.join(opts.projectPath, ".gitignore")
+  );
+
+  spinner.stop("Copied template filed successfully!");
 }

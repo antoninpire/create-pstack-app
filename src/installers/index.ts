@@ -1,5 +1,3 @@
-import { spinner } from "@clack/prompts";
-
 import { CLIResult } from "$/core/cli";
 import { planetscaleInstaller } from "$/installers/db/planetscale";
 import { tursoInstaller } from "$/installers/db/turso";
@@ -9,13 +7,15 @@ import { trpcInstaller } from "$/installers/form-actions/trpc";
 import { luciaInstaller } from "$/installers/lucia";
 import { tailwindInstaller } from "$/installers/styling/tailwind";
 import { unoInstaller } from "$/installers/styling/uno";
+import { Spinner } from "$/types";
 
 export type Installer = (opts: CLIResult, projectPath: string) => void;
 
-export function runInstallers(opts: CLIResult, projectPath: string) {
-  const s = spinner();
-  s.start("Running the installers...");
-
+export function runInstallers(
+  opts: CLIResult,
+  projectPath: string,
+  spinner: Spinner
+) {
   // Order is important here
   const installers = [
     {
@@ -53,12 +53,10 @@ export function runInstallers(opts: CLIResult, projectPath: string) {
   ].filter((i) => i.enabled);
 
   installers.forEach((installer) => {
-    s.start(`Scaffolding ${installer.label}...`);
+    spinner.start(`Scaffolding ${installer.label}...`);
 
     installer.install(opts, projectPath);
 
-    s.stop(`Scaffolded ${installer.label}...`);
+    spinner.stop(`Scaffolded ${installer.label}...`);
   });
-
-  s.stop("Ran the installers...");
 }

@@ -1,3 +1,4 @@
+import { getPathFromDist } from "$/utils/get-path-from-dist";
 import fs from "fs-extra";
 
 import { Installer } from "$/installers";
@@ -17,7 +18,11 @@ export const trpcInstaller: Installer = (opts, projectPath) => {
   });
 
   fs.copySync(
-    opts.flags.lucia ? "template/extras/trpc" : "template/extras/trpc-no-auth",
+    getPathFromDist(
+      opts.flags.lucia
+        ? "../template/extras/trpc"
+        : "../template/extras/trpc-no-auth"
+    ),
     projectPath
   );
 };
