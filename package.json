@@ -1,0 +1,42 @@
+{
+  "name": "perfect-stack",
+  "version": "0.0.1",
+  "description": "Create a super fast web application with the perfect stack.",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "tsup --watch",
+    "start": "node index.js",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "publish": "pnpm build && npm publish"
+  },
+  "keywords": [
+    "perfect-stack",
+    "sveltekit",
+    "tailwind",
+    "typescript",
+    "lucia",
+    "trpc"
+  ],
+  "type": "module",
+  "author": "Antonin PIRE",
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "dependencies": {
+    "@clack/core": "^0.3.3",
+    "@clack/prompts": "^0.7.0",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.10.0",
+    "eslint": "^8.54.0",
+    "tsup": "^8.0.1",
+    "type-fest": "^4.8.2",
+    "typescript": "^5.3.2"
+  }
+}
