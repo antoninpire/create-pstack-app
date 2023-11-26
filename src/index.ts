@@ -5,21 +5,16 @@ import fs from "fs-extra";
 import path from "path";
 
 import { runCLI } from "$/core/cli";
+import { createEnvFiles } from "$/core/create-env-files";
 import { initializeGit } from "$/core/initialize-git";
 import { installDependencies } from "$/core/install-dependencies";
 import { scaffoldProject } from "$/core/scaffold-project";
 import { runInstallers } from "$/installers";
-import { getPackageManager } from "$/utils/get-package-manager";
 import { parseNameAndPath } from "$/utils/parse-name-and-path";
 import { sortPackageJson } from "sort-package-json";
 
 async function main() {
-  // TODO: remove this line
-  fs.removeSync("test");
-
   const result = await runCLI();
-
-  const packageManager = getPackageManager();
 
   const spinner = clackSpinner();
 
@@ -29,7 +24,7 @@ async function main() {
   // We scaffold the projects
   await scaffoldProject(
     {
-      packageManager,
+      packageManager: result.flags.packageManager,
       projectName: parsedName,
       projectPath: parsedPath,
     },
@@ -45,12 +40,17 @@ async function main() {
   packageJson.name = parsedName;
 
   // ? Bun doesn't support this field (yet)
-  if (packageManager !== "bun") {
-    const { stdout } = await execa(packageManager, ["-v"], {
+  if (result.flags.packageManager !== "bun") {
+    const { stdout } = await execa(result.flags.packageManager, ["-v"], {
       cwd: parsedPath,
     });
-    packageJson.packageManager = `${packageManager}@${stdout.trim()}`;
+    packageJson.packageManager = `${
+      result.flags.packageManager
+    }@${stdout.trim()}`;
   }
+
+  // We create the .env files
+  createEnvFiles(result, parsedPath);
 
   // We sort the package.json file
   sortPackageJson(packageJson);
@@ -59,7 +59,7 @@ async function main() {
 
   // We install the dependencies
   if (result.flags.install) {
-    await installDependencies(parsedPath, packageManager, spinner);
+    await installDependencies(parsedPath, result.flags.packageManager, spinner);
   }
 
   // We initialize the git repository

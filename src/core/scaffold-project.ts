@@ -3,14 +3,14 @@ import fs from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { CLIPackageManager } from "$/core/cli";
 import { Spinner } from "$/types";
-import { PackageManager } from "$/utils/get-package-manager";
 
 export async function scaffoldProject(
   opts: {
     projectName: string;
     projectPath: string;
-    packageManager: PackageManager;
+    packageManager: CLIPackageManager;
   },
   spinner: Spinner
 ) {
@@ -73,6 +73,7 @@ export async function scaffoldProject(
     path.join(templatePath, "_gitignore"),
     path.join(opts.projectPath, ".gitignore")
   );
+  fs.removeSync(path.join(opts.projectPath, "_gitignore"));
 
   spinner.stop("Copied template filed successfully!");
 }

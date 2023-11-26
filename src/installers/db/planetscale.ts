@@ -5,7 +5,7 @@ import { Installer } from "$/installers";
 import { addDependency } from "$/utils/add-dependency";
 import { getPathFromDist } from "$/utils/get-path-from-dist";
 
-export const planetscaleInstaller: Installer = (opts, projectPath) => {
+export const planetscaleInstaller: Installer = (_opts, projectPath) => {
   addDependency({
     depencencies: ["@planetscale/database"],
     projectPath,
@@ -22,4 +22,6 @@ export const planetscaleInstaller: Installer = (opts, projectPath) => {
     "db:migrate": "dotenv drizzle-kit generate:mysql",
     "db:push": "dotenv drizzle-kit push:mysql",
   };
+
+  // TODO: replace project name for tables etc
 };

@@ -1,15 +1,16 @@
 import { confirm, group, select, text } from "@clack/prompts";
 import { Command } from "commander";
 
-import { getPackageManager } from "$/utils/get-package-manager";
 import { getVersion } from "$/utils/get-version";
 import { validateProjectName } from "$/utils/validate-project-name";
 
 type CLIStyling = "none" | "tailwind" | "uno";
 type CLIDatabase = "planetscale" | "turso" | "mysql";
 type CLIFormActions = "none" | "trpc" | "superforms";
+export type CLIPackageManager = "yarn" | "npm" | "pnpm" | "bun";
 
 type CLIFlags = {
+  packageManager: CLIPackageManager;
   git: boolean;
   install: boolean;
   database: CLIDatabase;
@@ -44,7 +45,6 @@ export async function runCLI(): Promise<CLIResult> {
     .parse(process.argv);
 
   const projectName = program.args[0] ?? "my-app";
-  const packageManager = getPackageManager();
   const flags = program.opts();
 
   const project = await group(
@@ -57,6 +57,17 @@ export async function runCLI(): Promise<CLIResult> {
             validate: validateProjectName,
           }),
       }),
+      packageManager: () =>
+        select({
+          message: "What package manager would you like to use?",
+          options: [
+            { label: "Yarn", value: "yarn" },
+            { label: "NPM", value: "npm" },
+            { label: "PNPM", value: "pnpm" },
+            { label: "Bun", value: "bun" },
+          ],
+          initialValue: "pnpm",
+        }),
       styling: () =>
         select({
           message: "What styling solution would you like to use?",
@@ -99,7 +110,7 @@ export async function runCLI(): Promise<CLIResult> {
       ...(!flags["no-install"] && {
         install: () =>
           confirm({
-            message: `Should we install your dependencies using "${packageManager} install"?`,
+            message: `Should we install your dependencies?`,
             initialValue: true,
           }),
       }),
@@ -121,6 +132,7 @@ export async function runCLI(): Promise<CLIResult> {
   const result: CLIResult = {
     name: project.name ?? projectName,
     flags: {
+      packageManager: project.packageManager as CLIPackageManager,
       database: project.database as CLIDatabase,
       git: project.git ?? false,
       install: project.install ?? false,
