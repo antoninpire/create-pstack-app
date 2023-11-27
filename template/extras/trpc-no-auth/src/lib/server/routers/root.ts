@@ -1,8 +1,21 @@
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+import { z } from "zod";
 
-import { router } from "../trpc";
+import { publicProcedure, router } from "../trpc";
 
-export const appRouter = router({});
+export const appRouter = router({
+  example: publicProcedure
+    .input(
+      z.object({
+        message: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return {
+        message: input.message,
+      };
+    }),
+});
 
 export type AppRouter = typeof appRouter;
 
