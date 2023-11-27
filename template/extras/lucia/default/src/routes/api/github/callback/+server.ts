@@ -51,7 +51,7 @@ export const GET = async ({ url, cookies, locals }) => {
         ? {
             userId: currentUser.id,
             email: emails[0].email,
-            username: currentUser.username,
+            username: currentUser.username ?? "",
           }
         : null;
     }

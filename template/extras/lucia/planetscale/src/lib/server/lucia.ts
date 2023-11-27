@@ -4,6 +4,7 @@ import { lucia } from "lucia";
 import { sveltekit } from "lucia/middleware";
 
 import { dev } from "$app/environment";
+import { env } from "$env/dynamic/private";
 import { connection } from "$lib/server/db";
 
 export const auth = lucia({

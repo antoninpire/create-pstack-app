@@ -1,11 +1,11 @@
-import { InferSelectModel } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
   bigint,
   boolean,
   datetime,
   index,
   mysqlTableCreator,
-  sql,
   uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
