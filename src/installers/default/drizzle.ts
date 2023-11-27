@@ -10,12 +10,10 @@ export const drizzleInstaller: Installer = (opts, projectPath) => {
   addDependency({
     depencencies: ["drizzle-kit", "dotenv"],
     projectPath,
-    dev: true,
   });
   addDependency({
     depencencies: ["drizzle-orm"],
     projectPath,
-    dev: false,
   });
 
   // Schemas (depends on auth)

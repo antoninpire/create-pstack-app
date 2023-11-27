@@ -14,7 +14,6 @@ export const trpcInstaller: Installer = (opts, projectPath) => {
       "zod",
     ],
     projectPath,
-    dev: false,
   });
 
   fs.copySync(

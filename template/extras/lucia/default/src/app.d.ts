@@ -1,7 +1,5 @@
 /// <reference types="@cloudflare/workers-types" />
 
-import type { UserPreferencesDefaultType } from "$lib/server/db/schema/user-preferences";
-
 declare global {
   namespace App {
     interface Locals {
@@ -19,9 +17,7 @@ declare global {
       email: string;
       username: string;
     };
-    type DatabaseSessionAttributes = {
-      defaultType: UserPreferencesDefaultType;
-    };
+    type DatabaseSessionAttributes = Record<string, never>;
   }
 }
 

@@ -8,7 +8,6 @@ export const superformsInstaller: Installer = (opts, projectPath) => {
   addDependency({
     depencencies: ["sveltekit-superforms", "zod"],
     projectPath,
-    dev: false,
   });
 
   fs.copySync(getPathFromDist("../template/extras/superforms"), projectPath);

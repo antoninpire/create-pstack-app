@@ -5,8 +5,7 @@ import { drizzleInstaller } from "$/installers/default/drizzle";
 import { superformsInstaller } from "$/installers/form-actions/superforms";
 import { trpcInstaller } from "$/installers/form-actions/trpc";
 import { luciaInstaller } from "$/installers/lucia";
-import { tailwindInstaller } from "$/installers/styling/tailwind";
-import { unoInstaller } from "$/installers/styling/uno";
+import { tailwindInstaller } from "$/installers/tailwind";
 import { Spinner } from "$/types";
 
 export type Installer = (opts: CLIResult, projectPath: string) => void;
@@ -19,10 +18,9 @@ export function runInstallers(
   // Order is important here
   const installers = [
     {
-      label: opts.flags.styling === "tailwind" ? "Tailwind CSS" : "Uno CSS",
-      enabled: opts.flags.styling !== "none",
-      install:
-        opts.flags.styling === "tailwind" ? tailwindInstaller : unoInstaller,
+      label: "Tailwind CSS",
+      enabled: opts.flags.tailwind,
+      install: tailwindInstaller,
     },
     {
       label: "Drizzle",

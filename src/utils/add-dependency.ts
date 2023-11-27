@@ -5,8 +5,13 @@ const dependencyVersionMap = {
   // Drizzle / DB
   "drizzle-orm": "^0.29.0",
   "drizzle-kit": "^0.20.4",
-  "@planetscale/database": "^1.11.0",
   dotenv: "16.3.1",
+
+  // Planetscale
+  "@planetscale/database": "^1.11.0",
+
+  // Turso
+  "@libsql/client": "0.4.0-pre.2",
 
   // Tailwind
   tailwindcss: "^3.3.5",
@@ -15,7 +20,9 @@ const dependencyVersionMap = {
 
   // Lucia
   "@lucia-auth/adapter-mysql": "^2.1.0",
+  "@lucia-auth/adapter-sqlite": "^2.0.1",
   lucia: "^2.7.4",
+  "@lucia-auth/oauth": "^3.5.0",
 
   // TRPC
   "@trpc/client": "^10.44.1",
@@ -32,7 +39,6 @@ const dependencyVersionMap = {
 export function addDependency(opts: {
   depencencies: (keyof typeof dependencyVersionMap)[];
   projectPath: string;
-  dev?: boolean;
 }) {
   const packageJsonPath = path.join(opts.projectPath, "package.json");
 
@@ -41,16 +47,11 @@ export function addDependency(opts: {
   opts.depencencies.forEach((dependency) => {
     const version = dependencyVersionMap[dependency];
 
-    if (!packageJson["dependencies"]) {
-      packageJson["dependencies"] = {};
-    }
-
     if (!packageJson["devDependencies"]) {
       packageJson["devDependencies"] = {};
     }
 
-    packageJson[opts.dev ? "devDependencies" : "dependencies"][dependency] =
-      version;
+    packageJson["devDependencies"][dependency] = version;
   });
 
   fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });

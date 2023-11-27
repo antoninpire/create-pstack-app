@@ -4,8 +4,7 @@ import { Command } from "commander";
 import { getVersion } from "$/utils/get-version";
 import { validateProjectName } from "$/utils/validate-project-name";
 
-type CLIStyling = "none" | "tailwind" | "uno";
-type CLIDatabase = "planetscale" | "turso" | "mysql";
+type CLIDatabase = "planetscale" | "turso";
 type CLIFormActions = "none" | "trpc" | "superforms";
 export type CLIPackageManager = "yarn" | "npm" | "pnpm" | "bun";
 
@@ -14,7 +13,7 @@ type CLIFlags = {
   git: boolean;
   install: boolean;
   database: CLIDatabase;
-  styling: CLIStyling;
+  tailwind: boolean;
   lucia: boolean;
   ["form-actions"]: CLIFormActions;
 };
@@ -68,15 +67,10 @@ export async function runCLI(): Promise<CLIResult> {
           ],
           initialValue: "pnpm",
         }),
-      styling: () =>
-        select({
-          message: "What styling solution would you like to use?",
-          options: [
-            { value: "none", label: "None" },
-            { label: "Tailwind CSS", value: "tailwind" },
-            { label: "Uno CSS", value: "uno" },
-          ],
-          initialValue: "none",
+      tailwind: () =>
+        confirm({
+          message: "Would you like to use Tailwind CSS?",
+          initialValue: true,
         }),
       database: () =>
         select({
@@ -136,7 +130,7 @@ export async function runCLI(): Promise<CLIResult> {
       database: project.database as CLIDatabase,
       git: project.git ?? false,
       install: project.install ?? false,
-      styling: project.styling as CLIStyling,
+      tailwind: project.tailwind ?? false,
       lucia: (project.lucia as boolean) ?? false,
       "form-actions": project["form-actions"] as CLIFormActions,
     },

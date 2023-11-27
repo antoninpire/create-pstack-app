@@ -8,7 +8,6 @@ export const tailwindInstaller: Installer = (_opts, projectPath) => {
   addDependency({
     depencencies: ["tailwindcss", "autoprefixer", "postcss"],
     projectPath,
-    dev: true,
   });
 
   fs.copySync(getPathFromDist("../template/extras/tailwind"), projectPath);

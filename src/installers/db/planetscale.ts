@@ -9,7 +9,6 @@ export const planetscaleInstaller: Installer = (_opts, projectPath) => {
   addDependency({
     depencencies: ["@planetscale/database"],
     projectPath,
-    dev: false,
   });
 
   fs.copySync(getPathFromDist("../template/extras/planetscale"), projectPath);
@@ -22,6 +21,8 @@ export const planetscaleInstaller: Installer = (_opts, projectPath) => {
     "db:migrate": "dotenv drizzle-kit generate:mysql",
     "db:push": "dotenv drizzle-kit push:mysql",
   };
+
+  fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
 
   // TODO: replace project name for tables etc
 };

@@ -6,19 +6,26 @@ import { getPathFromDist } from "$/utils/get-path-from-dist";
 
 export const luciaInstaller: Installer = (opts, projectPath) => {
   addDependency({
-    depencencies: ["@lucia-auth/adapter-mysql", "lucia"],
+    depencencies: [
+      opts.flags.database === "planetscale"
+        ? "@lucia-auth/adapter-mysql"
+        : "@lucia-auth/adapter-sqlite",
+      "lucia",
+      "@lucia-auth/oauth",
+    ],
     projectPath,
-    dev: false,
   });
+
+  fs.copySync(getPathFromDist("../template/extras/lucia/default"), projectPath);
 
   if (opts.flags.database === "planetscale") {
     fs.copySync(
       getPathFromDist("../template/extras/lucia/planetscale"),
       projectPath
     );
+  } else if (opts.flags.database === "turso") {
+    fs.copySync(getPathFromDist("../template/extras/lucia/turso"), projectPath);
   }
 
   // TODO: snippets for login pages and signup pages
-
-  // TODO: write to .env
 };

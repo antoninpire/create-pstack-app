@@ -1,16 +1,17 @@
-import { planetscale } from "@lucia-auth/adapter-mysql";
+import { libsql } from "@lucia-auth/adapter-sqlite";
 import { github } from "@lucia-auth/oauth/providers";
 import { lucia } from "lucia";
 import { sveltekit } from "lucia/middleware";
 
 import { dev } from "$app/environment";
-import { connection } from "$lib/server/db";
+import { env } from "$env/dynamic/private";
+import { client } from "$lib/server/db";
 
 export const auth = lucia({
-  adapter: planetscale(connection, {
-    key: "project_auth_keys",
-    session: "project_auth_sessions",
-    user: "project_users",
+  adapter: libsql(client, {
+    key: "auth_keys",
+    session: "auth_sessions",
+    user: "users",
   }),
   env: dev ? "DEV" : "PROD",
   middleware: sveltekit(),

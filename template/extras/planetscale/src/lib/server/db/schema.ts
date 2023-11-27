@@ -4,7 +4,6 @@ import {
   boolean,
   datetime,
   index,
-  mysqlEnum,
   mysqlTableCreator,
   sql,
   uniqueIndex,
@@ -69,16 +68,6 @@ export const authSessions = mysqlTable(
       mode: "number",
     }).notNull(),
     username: varchar("username", { length: 75 }),
-    defaultType: mysqlEnum("defaultType", [
-      "anime",
-      "manga",
-      "tv-show",
-      "movie",
-      "book",
-      "video-game",
-    ])
-      .notNull()
-      .default("movie"),
   },
   (table) => ({
     userIdx: index("user_idx").on(table.userId),
