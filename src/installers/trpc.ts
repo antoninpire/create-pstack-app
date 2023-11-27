@@ -27,7 +27,7 @@ export const trpcInstaller: Installer = (opts, projectPath) => {
     projectPath
   );
 
-  const mainPagePath = path.join(projectPath, "src/routes/+page.svelte");
+  const mainPagePath = "src/routes/+page.svelte";
   let content = fs.readFileSync(path.join(projectPath, mainPagePath), {
     encoding: "utf-8",
   });
