@@ -12,6 +12,7 @@ export const luciaInstaller: Installer = (opts, projectPath) => {
         : "@lucia-auth/adapter-sqlite",
       "lucia",
       "@lucia-auth/oauth",
+      "zod",
     ],
     projectPath,
   });
@@ -26,6 +27,4 @@ export const luciaInstaller: Installer = (opts, projectPath) => {
   } else if (opts.flags.database === "turso") {
     fs.copySync(getPathFromDist("../template/extras/lucia/turso"), projectPath);
   }
-
-  // TODO: snippets for login pages and signup pages
 };

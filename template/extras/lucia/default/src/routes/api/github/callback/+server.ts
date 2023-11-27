@@ -9,9 +9,7 @@ export const GET = async ({ url, cookies, locals }) => {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: url.searchParams.has("path")
-          ? url.searchParams.get("path")!
-          : "/app",
+        Location: "/",
       },
     });
 

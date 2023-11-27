@@ -1,11 +1,10 @@
 import { CLIResult } from "$/core/cli";
 import { planetscaleInstaller } from "$/installers/db/planetscale";
 import { tursoInstaller } from "$/installers/db/turso";
-import { drizzleInstaller } from "$/installers/default/drizzle";
-import { superformsInstaller } from "$/installers/form-actions/superforms";
-import { trpcInstaller } from "$/installers/form-actions/trpc";
+import { drizzleInstaller } from "$/installers/drizzle";
 import { luciaInstaller } from "$/installers/lucia";
 import { tailwindInstaller } from "$/installers/tailwind";
+import { trpcInstaller } from "$/installers/trpc";
 import { Spinner } from "$/types";
 
 export type Installer = (opts: CLIResult, projectPath: string) => void;
@@ -41,12 +40,9 @@ export function runInstallers(
       install: luciaInstaller,
     },
     {
-      label: "Form Actions",
-      enabled: opts.flags["form-actions"] !== "none",
-      install:
-        opts.flags["form-actions"] === "trpc"
-          ? trpcInstaller
-          : superformsInstaller,
+      label: "TRPC",
+      enabled: opts.flags.trpc,
+      install: trpcInstaller,
     },
   ].filter((i) => i.enabled);
 

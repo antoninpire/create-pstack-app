@@ -31,9 +31,6 @@ const dependencyVersionMap = {
   "trpc-svelte-query": "^1.0.3",
   "@tanstack/svelte-query": "4.36.1",
   zod: "^3.22.4",
-
-  // Superforms
-  "sveltekit-superforms": "^1.10.2",
 } as const;
 
 export function addDependency(opts: {

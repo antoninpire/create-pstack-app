@@ -5,7 +5,6 @@ import { getVersion } from "$/utils/get-version";
 import { validateProjectName } from "$/utils/validate-project-name";
 
 type CLIDatabase = "planetscale" | "turso";
-type CLIFormActions = "none" | "trpc" | "superforms";
 export type CLIPackageManager = "yarn" | "npm" | "pnpm" | "bun";
 
 type CLIFlags = {
@@ -15,7 +14,7 @@ type CLIFlags = {
   database: CLIDatabase;
   tailwind: boolean;
   lucia: boolean;
-  ["form-actions"]: CLIFormActions;
+  trpc: boolean;
 };
 
 export type CLIResult = {
@@ -88,18 +87,10 @@ export async function runCLI(): Promise<CLIResult> {
           initialValue: true,
         });
       },
-      ["form-actions"]: () =>
-        select({
-          message: "What will you use to handle your form actions?",
-          options: [
-            { label: "None", value: "none" },
-            { label: "TRPC", value: "trpc" },
-            {
-              label: "Sveltekit form actions + superforms",
-              value: "superforms",
-            },
-          ],
-          initialValue: "trpc",
+      trpc: () =>
+        confirm({
+          message: "Would you like to use TRPC?",
+          initialValue: true,
         }),
       ...(!flags["no-install"] && {
         install: () =>
@@ -132,7 +123,7 @@ export async function runCLI(): Promise<CLIResult> {
       install: project.install ?? false,
       tailwind: project.tailwind ?? false,
       lucia: (project.lucia as boolean) ?? false,
-      "form-actions": project["form-actions"] as CLIFormActions,
+      trpc: project.trpc ?? false,
     },
   };
 

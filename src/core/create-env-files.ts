@@ -10,7 +10,7 @@ export function createEnvFiles(opts: CLIResult, projectPath: string) {
     content += `# Database\nDATABASE_HOST="aws.connect.psdb.cloud"\nDATABASE_USERNAME="YOUR_PLANETSCALE_USERNAME"\nDATABASE_PASSWORD="YOUR_PLANETSCALE_PASSWORD"\n`;
   }
   if (opts.flags.database === "turso") {
-    content += `# Database\DATABASE_URL="YOUR_TURSO_DB_URL"\DATABASE_AUTH_TOKEN="YOUR_TURSO_AUTH_TOKEN"\n`;
+    content += `# Database\nDATABASE_URL="YOUR_TURSO_DB_URL"\nDATABASE_AUTH_TOKEN="YOUR_TURSO_AUTH_TOKEN"\n`;
   }
 
   if (opts.flags.lucia) {

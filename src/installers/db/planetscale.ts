@@ -23,6 +23,4 @@ export const planetscaleInstaller: Installer = (_opts, projectPath) => {
   };
 
   fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 });
-
-  // TODO: replace project name for tables etc
 };

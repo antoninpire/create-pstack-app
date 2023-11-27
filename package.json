@@ -1,6 +1,6 @@
 {
   "name": "create-pstack-app",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "Create a super fast web app with the perfect stack.",
   "license": "MIT",
   "main": "index.js",
