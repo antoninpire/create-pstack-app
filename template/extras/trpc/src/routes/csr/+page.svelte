@@ -1,7 +1,11 @@
 <script lang="ts">
   import { trpc } from "$lib/trpc";
 
-  const query = trpc.example.query();
+  const query = trpc.example.query({ message: "Hello World!" });
 </script>
 
-{$query.data.message}
+{#if $query.isLoading}
+  loading...
+{:else}
+  <b>Message received through CSR</b>: {$query.data?.message}
+{/if}

@@ -2,4 +2,4 @@
   export let data;
 </script>
 
-{data.example.message}
+<b>Message received through SSR</b>: {data.example.message}
