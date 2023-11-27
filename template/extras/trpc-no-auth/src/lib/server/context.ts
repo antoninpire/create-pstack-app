@@ -7,8 +7,6 @@ export async function createContext(event: RequestEvent) {
   return {
     event,
     db,
-    session: event.locals.session ?? (await event.locals.auth.validate()),
-    auth: event.locals.auth,
   };
 }
 
