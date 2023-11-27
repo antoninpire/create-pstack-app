@@ -12,6 +12,7 @@ export const trpcInstaller: Installer = (opts, projectPath) => {
       "@trpc/server",
       "devalue",
       "zod",
+      "@tanstack/svelte-query",
     ],
     projectPath,
   });

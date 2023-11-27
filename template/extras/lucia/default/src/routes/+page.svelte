@@ -11,7 +11,7 @@
 {:else}
   Not connected yet
   <br />
-  <a href="/api/github">Connect with github</a>
-  <a href="/login">Login with username</a>
-  <a href="/signup">Create an Account</a>
+  <a href="/api/github"><button>Connect with github</button></a>
+  <a href="/login"><button>Login with username</button></a>
+  <a href="/signup"><button>Create an Account</button></a>
 {/if}
