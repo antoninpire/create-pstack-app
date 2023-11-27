@@ -1,12 +1,10 @@
 import { type Config } from "drizzle-kit";
 
 export default {
-  schema: "./src/lib/server/db/schema",
+  schema: "./src/lib/server/db/schema.ts",
   driver: "mysql2",
   dbCredentials: {
-    host: process.env.DATABASE_HOST!,
-    user: process.env.DATABASE_USERNAME!,
-    password: process.env.DATABASE_PASSWORD!,
+    uri: process.env.DATABASE_URL!,
   },
   tablesFilter: ["project_*"],
   out: "./src/lib/server/db/migrations",
