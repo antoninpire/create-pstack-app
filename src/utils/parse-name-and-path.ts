@@ -24,7 +24,7 @@ export const parseNameAndPath = (rawInput: string) => {
 
   let appName = paths[paths.length - 1]!;
 
-  // If the user ran `npx create-t3-app .` or similar, the appName should be the current directory
+  // If the user ran `npx create-pstack-app .` or similar, the appName should be the current directory
   if (appName === ".") {
     const parsedCwd = path.resolve(process.cwd());
     appName = path.basename(parsedCwd);
